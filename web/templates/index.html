@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDoS Traffic Analysis System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            background-color: #fafafa;
+        }
+        .upload-area:hover {
+            border-color: #999;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .file-input {
+            margin: 20px 0;
+        }
+        .instructions {
+            background-color: #e7f3ff;
+            border-left: 6px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 6px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DDoS Traffic Analysis System</h1>
+        
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <ul>
+                <li>Upload a CSV file containing network traffic data</li>
+                <li>The system will automatically analyze the importance of features for DDoS detection</li>
+                <li>View the generated analysis report and feature importance visualization</li>
+            </ul>
+        </div>
+        
+        <div class="note">
+            <h4>Note:</h4>
+            <p>Please ensure that the uploaded CSV file contains network traffic data, including a "Label" column identifying the traffic type (BENIGN or DDoS)</p>
+        </div>
+        
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="upload-area">
+                <h2>Select CSV File to Upload</h2>
+                <div class="file-input">
+                    <input type="file" name="file" accept=".csv" required>
+                </div>
+                <p>Supported file format: .csv</p>
+            </div>
+            <div style="text-align: center;">
+                <input type="submit" value="Upload and Analyze" class="btn">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

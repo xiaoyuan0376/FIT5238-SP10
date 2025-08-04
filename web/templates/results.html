@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - DDoS Traffic Analysis System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        .nav a:hover {
+            background-color: #1976D2;
+        }
+        .feature-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .feature-table th, .feature-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .feature-table th {
+            background-color: #f2f2f2;
+        }
+        .feature-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .chart-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .summary {
+            background-color: #e8f5e9;
+            border-left: 6px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .note {
+            background-color: #e7f3ff;
+            border-left: 6px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DDoS Traffic Analysis Results</h1>
+        
+        <div class="nav">
+            <a href="/">Upload New File</a>
+            <a href="/results">Analysis Results</a>
+        </div>
+        
+        <div class="summary">
+            <h3>Analysis Summary</h3>
+            <p>The feature importance analysis of the uploaded CSV file has been completed. The table below shows the top 10 features that have the greatest impact on DDoS detection results.</p>
+        </div>
+        
+        <h2>Feature Importance Ranking</h2>
+        <table class="feature-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Feature Name</th>
+                    <th>Importance Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feature in features %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ feature.Feature }}</td>
+                    <td>{{ "%.6f"|format(feature.Importance) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <h2>Feature Importance Visualization</h2>
+        <div class="chart-container">
+            {% if plot_exists %}
+                <img src="/plot" alt="Feature Importance Chart">
+            {% else %}
+                <p>Chart not available</p>
+            {% endif %}
+        </div>
+        
+        <div class="note">
+            <h3>Result Interpretation</h3>
+            <p>The feature importance score reflects the influence of each feature on the DDoS detection model's prediction results. The higher the score, the more important the feature is for determining whether network traffic is a DDoS attack.</p>
+            <p>The system uses the Random Forest algorithm to calculate feature importance, which is an ensemble learning method based on decision trees that can effectively evaluate the contribution of each feature to the classification results.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyzing - DDoS Traffic Analysis System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .processing {
+            padding: 30px;
+        }
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DDoS Traffic Analysis System</h1>
+        
+        <div class="processing">
+            <h2>Analyzing file: {{ filename }}</h2>
+            <div class="spinner" id="spinner"></div>
+            <p>Processing data, please wait...</p>
+            <div id="message" class="message" style="display:none;"></div>
+            <a href="/" class="btn" id="backBtn" style="display:none;">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Start analysis automatically when page loads
+        window.onload = function() {
+            fetch('/process', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                const spinner = document.getElementById('spinner');
+                const message = document.getElementById('message');
+                const backBtn = document.getElementById('backBtn');
+                
+                spinner.style.display = 'none';
+                
+                if (data.status === 'success') {
+                    message.innerHTML = 'Analysis completed successfully!';
+                    message.className = 'message success';
+                    backBtn.style.display = 'inline-block';
+                    // Automatically redirect to results page
+                    setTimeout(function() {
+                        window.location.href = '/results';
+                    }, 1000);
+                } else {
+                    message.innerHTML = 'Analysis error: ' + data.message;
+                    message.className = 'message error';
+                    backBtn.style.display = 'inline-block';
+                }
+                
+                message.style.display = 'block';
+            })
+            .catch(error => {
+                const spinner = document.getElementById('spinner');
+                const message = document.getElementById('message');
+                const backBtn = document.getElementById('backBtn');
+                
+                spinner.style.display = 'none';
+                message.innerHTML = 'Analysis error: ' + error;
+                message.className = 'message error';
+                message.style.display = 'block';
+                backBtn.style.display = 'inline-block';
+            });
+        };
+    </script>
+</body>
+</html>
