@@ -108,7 +108,7 @@
         
         <div class="summary">
             <h3>Analysis Summary</h3>
-            <p>The feature importance analysis of the uploaded CSV file has been completed. The table below shows the top 10 features that have the greatest impact on DDoS detection results.</p>
+            <p>The feature importance analysis of the uploaded CSV file has been completed using Principal Component Analysis (PCA). The table below shows the top 10 features that have the greatest impact on network traffic characteristics.</p>
         </div>
 
         {% if classification %}
@@ -124,7 +124,7 @@
         </div>
         {% endif %}
 
-        <h2>Feature Importance Ranking</h2>
+        <h2>Feature Importance Ranking (PCA-based)</h2>
         <table class="feature-table">
             <thead>
                 <tr>
@@ -157,7 +157,7 @@
         
         <div class="note">
             <h3>How to Use This Information</h3>
-            <p>The feature importance ranking helps identify which network traffic characteristics are most indicative of DDoS attacks. You can use this information to:</p>
+            <p>The feature importance ranking (calculated using PCA) helps identify which network traffic characteristics are most indicative of different traffic patterns. You can use this information to:</p>
             <ul>
                 <li>Focus monitoring efforts on the most important features</li>
                 <li>Prioritize network resources for traffic with high-risk characteristics</li>

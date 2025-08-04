@@ -63,11 +63,11 @@ def process_file():
         print(f"Processing file: {filepath}")  # Debug log
         
         # Import the analysis functions from the project - now should work with sys.path modification above
-        from analysis.initAna import load_and_preprocess_data, feature_analysis, visualize_and_save
+        from analysis.pca_analysis import load_and_preprocess_data_unlabeled, pca_analysis, visualize_and_save_pca
         
         # Process the file
-        data = load_and_preprocess_data(filepath)
-        feature_importance, RandomForestClassifierModel = feature_analysis(data)
+        data = load_and_preprocess_data_unlabeled(filepath)
+        feature_importance, pca_model, scaler = pca_analysis(data)
         
         # Perform DDoS detection using the predict_utils module
         from models.predict_utils import predict_ddos_traffic
@@ -77,11 +77,12 @@ def process_file():
         data_sample = data.sample(n=sample_size, random_state=42)
         
         # Perform prediction on the sample
+        # Since we don't have actual labels, we'll only show predictions
         predicted_ddos_count, predicted_benign_count = predict_ddos_traffic(data_sample)
         
-        # Count actual labels in the sample
-        actual_ddos_count = int(data_sample['result'].sum())
-        actual_benign_count = len(data_sample) - actual_ddos_count
+        # Count actual labels in the sample - not applicable for unlabeled data
+        actual_ddos_count = 0
+        actual_benign_count = 0
         
         # Use absolute paths for result directory
         result_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'results'))
@@ -91,7 +92,7 @@ def process_file():
         
         try:
             # Visualize and save results
-            visualize_and_save(feature_importance)
+            visualize_and_save_pca(feature_importance)
         finally:
             # Change back to original directory
             os.chdir(original_cwd)
@@ -165,7 +166,7 @@ def download_report():
         importance_file = os.path.join(app.config['RESULT_FOLDER'], 'feature_importance_results.csv')
         if os.path.exists(importance_file):
             feature_importance = pd.read_csv(importance_file)
-            report_content += "Top 10 Feature Importance Rankings:\n"
+            report_content += "Top 10 Feature Importance Rankings (PCA Analysis):\n"
             report_content += "-" * 30 + "\n"
             top_features = feature_importance.head(10)
             for i, (index, row) in enumerate(top_features.iterrows()):

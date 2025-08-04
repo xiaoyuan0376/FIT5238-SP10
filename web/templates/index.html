@@ -69,15 +69,16 @@
         <div class="instructions">
             <h3>Instructions:</h3>
             <ul>
-                <li>Upload a CSV file containing network traffic data</li>
-                <li>The system will automatically analyze the importance of features for DDoS detection</li>
+                <li>Upload a CSV file containing network traffic data (without labels)</li>
+                <li>The system will automatically analyze the importance of features for DDoS detection using PCA</li>
                 <li>View the generated analysis report and feature importance visualization</li>
             </ul>
         </div>
         
         <div class="note">
             <h4>Note:</h4>
-            <p>Please ensure that the uploaded CSV file contains network traffic data, including a "Label" column identifying the traffic type (BENIGN or DDoS)</p>
+            <p>Please ensure that the uploaded CSV file contains network traffic data. Label column is not required.</p>
+            <p>The system now uses Principal Component Analysis (PCA) for feature importance analysis.</p>
         </div>
         
         <form action="/upload" method="post" enctype="multipart/form-data">
@@ -86,7 +87,7 @@
                 <div class="file-input">
                     <input type="file" name="file" accept=".csv" required>
                 </div>
-                <p>Supported file format: .csv</p>
+                <p>Supported file format: .csv (without labels)</p>
             </div>
             <div style="text-align: center;">
                 <input type="submit" value="Upload and Analyze" class="btn">
