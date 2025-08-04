@@ -1,0 +1,26 @@
+DDoS Traffic Analysis Report
+==============================
+
+Top 10 Feature Importance Rankings:
+------------------------------
+1.  Fwd Packet Length Mean: 0.081518
+2.  Fwd Packet Length Max: 0.079979
+3.  Avg Fwd Segment Size: 0.066582
+4.  Subflow Fwd Bytes: 0.061098
+5. Init_Win_bytes_forward: 0.060266
+6.  act_data_pkt_fwd: 0.051409
+7. Total Length of Fwd Packets: 0.046224
+8.  Bwd Packet Length Min: 0.046085
+9. Subflow Fwd Packets: 0.039795
+10.  Fwd Header Length.1: 0.037530
+
+DDoS Traffic Classification Results:
+------------------------------
+Total Samples Analyzed: 100
+Predicted DDoS Traffic Count: 100
+Predicted Benign Traffic Count: 0
+Predicted DDoS Traffic Percentage: 100.00%
+Actual DDoS Traffic Count: 65
+Actual Benign Traffic Count: 35
+Actual DDoS Traffic Percentage: 65.00%
+

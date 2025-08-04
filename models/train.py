@@ -6,7 +6,7 @@ import torch.optim as optim
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
 
-from models.model import DDoSDetector
+from model import DDoSDetector
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -14,7 +14,6 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 veri = pd.read_csv("Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv", delimiter=',', skiprows=0, low_memory=False)
 veri[' Label'].replace(['BENIGN', 'DDoS'], [0, 1], inplace=True)
 moddf = veri.dropna()
-del moddf[' Flow Packets/s']
 features = [" Fwd Packet Length Mean", " Fwd Packet Length Max", " Avg Fwd Segment Size",
             "Init_Win_bytes_forward", " Subflow Fwd Bytes", "Total Length of Fwd Packets",
             " act_data_pkt_fwd", " Bwd Packet Length Min", "Subflow Fwd Packets",
@@ -28,7 +27,7 @@ cikis = X.iloc[:, -1]
 xtrain, xtest, ytrain, ytest = train_test_split(giris, cikis, test_size=0.2)
 x_train, y_train = np.array(xtrain), np.array(ytrain)
 x_test, y_test = np.array(xtest), np.array(ytest)
-
+print(x_test[:5])
 # 重塑为3D张量 (样本数, 序列长度=1, 特征数=10)
 x_train = np.reshape(x_train, (x_train.shape[0], 1, x_train.shape[1]))
 x_test = np.reshape(x_test, (x_test.shape[0], 1, x_test.shape[1]))
@@ -85,6 +84,7 @@ def train_model(model, train_loader, epochs=10):
 def evaluate_model(model, x_test, y_test):
     model.eval()
     with torch.no_grad():
+        print(x_test.size())
         outputs = model(x_test)
         print("xtest", "y_test", "output")
         # 重塑维度以正确连接

@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
 import warnings
-import os
 
 warnings.filterwarnings('ignore')
 
@@ -98,12 +97,7 @@ def visualize_and_save(feature_importance, top_n=10):
 
 
 if __name__ == "__main__":
-    # Check if data directory exists
-    data_dir = "../data"
-    if os.path.exists(data_dir):
-        filepath = os.path.join(data_dir, "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
-    else:
-        filepath = "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv"
+    filepath = "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv"
 
     data = load_and_preprocess_data(filepath)
     feature_importance, _ = feature_analysis(data)
