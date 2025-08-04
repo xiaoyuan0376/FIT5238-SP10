@@ -73,7 +73,7 @@ def process_file():
         from models.predict_utils import predict_ddos_traffic
         
         # Take a sample of data for classification
-        sample_size = min(100, len(data))
+        sample_size = min(1000, len(data))
         data_sample = data.sample(n=sample_size, random_state=42)
         
         # Perform prediction on the sample
@@ -184,10 +184,10 @@ def download_report():
             report_content += f"Total Samples Analyzed: {classification_results['total_samples']}\n"
             report_content += f"Predicted DDoS Traffic Count: {classification_results['predicted_ddos_count']}\n"
             report_content += f"Predicted Benign Traffic Count: {classification_results['predicted_benign_count']}\n"
-            report_content += f"Predicted DDoS Traffic Percentage: {classification_results['predicted_ddos_count']/classification_results['total_samples']*100:.2f}%\n"
+            report_content += f"Predicted DDoS Traffic Percentage: {classification_results['predicted_ddos_count']/classification_results['total_samples']*1000:.2f}%\n"
             report_content += f"Actual DDoS Traffic Count: {classification_results['actual_ddos_count']}\n"
             report_content += f"Actual Benign Traffic Count: {classification_results['actual_benign_count']}\n"
-            report_content += f"Actual DDoS Traffic Percentage: {classification_results['actual_ddos_count']/classification_results['total_samples']*100:.2f}%\n\n"
+            report_content += f"Actual DDoS Traffic Percentage: {classification_results['actual_ddos_count']/classification_results['total_samples']*1000:.2f}%\n\n"
         
         # Save report to file
         report_path = os.path.join(app.config['RESULT_FOLDER'], 'ddos_analysis_report.txt')
