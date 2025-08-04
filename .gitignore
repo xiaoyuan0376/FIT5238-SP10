@@ -65,3 +65,8 @@ yarn-error.log
 
 # Docker
 docker-compose.override.yml
+
+# ==== 项目特定目录 ====
+# 上传文件和结果文件目录
+uploads/
+results/

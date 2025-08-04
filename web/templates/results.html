@@ -120,9 +120,6 @@
                 <li><strong>Predicted DDoS Traffic Count:</strong> {{ classification.predicted_ddos_count }}</li>
                 <li><strong>Predicted Benign Traffic Count:</strong> {{ classification.predicted_benign_count }}</li>
                 <li><strong>Predicted DDoS Traffic Percentage:</strong> {{ "%.2f"|format(classification.predicted_ddos_count/classification.total_samples*100) }}%</li>
-                <li><strong>Actual DDoS Traffic Count:</strong> {{ classification.actual_ddos_count }}</li>
-                <li><strong>Actual Benign Traffic Count:</strong> {{ classification.actual_benign_count }}</li>
-                <li><strong>Actual DDoS Traffic Percentage:</strong> {{ "%.2f"|format(classification.actual_ddos_count/classification.total_samples*100) }}%</li>
             </ul>
         </div>
         {% endif %}

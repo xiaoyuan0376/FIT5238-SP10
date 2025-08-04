@@ -1,1 +1,1 @@
-{"predicted_ddos_count": 704, "predicted_benign_count": 296, "actual_ddos_count": 604, "actual_benign_count": 396, "total_samples": 1000}
+{"predicted_ddos_count": 693, "predicted_benign_count": 307, "actual_ddos_count": 579, "actual_benign_count": 421, "total_samples": 1000}

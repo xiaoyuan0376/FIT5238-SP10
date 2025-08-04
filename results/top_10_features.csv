@@ -1,11 +1,11 @@
 Feature,Importance
- Fwd Packet Length Mean,0.08151817958749558
- Fwd Packet Length Max,0.07997946657880127
- Avg Fwd Segment Size,0.0665817750352123
- Subflow Fwd Bytes,0.06109789915649752
-Init_Win_bytes_forward,0.060265884845018554
- act_data_pkt_fwd,0.05140915367963288
-Total Length of Fwd Packets,0.04622445137002762
- Bwd Packet Length Min,0.04608462573453319
-Subflow Fwd Packets,0.03979519076975126
- Fwd Header Length.1,0.03753035664537914
+ Fwd Packet Length Mean,0.09492590386513465
+ Avg Fwd Segment Size,0.07779306614040335
+ Fwd Packet Length Max,0.06434764251967613
+ Subflow Fwd Bytes,0.060603385467965905
+Init_Win_bytes_forward,0.055045564865527086
+Total Length of Fwd Packets,0.05049375944201198
+ Bwd Packet Length Min,0.04586589566168913
+ act_data_pkt_fwd,0.04557041764140303
+ Fwd IAT Mean,0.04078584233876001
+ Total Fwd Packets,0.03605157390384129

@@ -184,10 +184,15 @@ def download_report():
             report_content += f"Total Samples Analyzed: {classification_results['total_samples']}\n"
             report_content += f"Predicted DDoS Traffic Count: {classification_results['predicted_ddos_count']}\n"
             report_content += f"Predicted Benign Traffic Count: {classification_results['predicted_benign_count']}\n"
-            report_content += f"Predicted DDoS Traffic Percentage: {classification_results['predicted_ddos_count']/classification_results['total_samples']*1000:.2f}%\n"
-            report_content += f"Actual DDoS Traffic Count: {classification_results['actual_ddos_count']}\n"
-            report_content += f"Actual Benign Traffic Count: {classification_results['actual_benign_count']}\n"
-            report_content += f"Actual DDoS Traffic Percentage: {classification_results['actual_ddos_count']/classification_results['total_samples']*1000:.2f}%\n\n"
+            report_content += f"Predicted DDoS Traffic Percentage: {classification_results['predicted_ddos_count']/classification_results['total_samples']*100:.2f}%\n\n"
+            
+            # Add feature importance results
+            report_content += "Feature Importance Ranking (Top 10):\n"
+            report_content += "-" * 30 + "\n"
+            top_features = feature_importance.head(10)
+            for i, (index, row) in enumerate(top_features.iterrows()):
+                report_content += f"{i+1}. {row['Feature']}: {row['Importance']:.6f}\n"
+            report_content += "\n"
         
         # Save report to file
         report_path = os.path.join(app.config['RESULT_FOLDER'], 'ddos_analysis_report.txt')
