@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{#  <script src="/templates/axios.min.js"></script> <!-- This file needs to be in the /custom-js folder -->#}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>User Registration & Login</title>
+  <style>
+    /* Import futuristic font */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0a0a1f; /* Dark space blue background */
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Main container with glowing effect */
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 450px;
+      height: auto;
+      min-height: 550px;
+      padding: 40px 30px;
+      background: rgba(10, 10, 31, 0.75);
+      border: 2px solid #0afddb;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #0afddb, 0 0 25px rgba(10, 253, 219, 0.5);
+      backdrop-filter: blur(3px);
+      overflow: hidden; /* Important for the sliding forms */
+    }
+
+    /* Form containers for sliding animation */
+    .form-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 40px 30px;
+      transition: transform 0.6s ease-in-out;
+    }
+
+    .login-form {
+      transform: translateX(0);
+    }
+
+    .register-form {
+      transform: translateX(100%);
+    }
+
+    .container.active .login-form {
+      transform: translateX(-100%);
+    }
+
+    .container.active .register-form {
+      transform: translateX(0);
+    }
+
+    /* Header Styles */
+    .form-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .form-header h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px;
+      color: #0afddb;
+      text-shadow: 0 0 5px #0afddb, 0 0 10px rgba(10, 253, 219, 0.7);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .form-header p {
+      color: #a0a0c0;
+      font-size: 14px;
+    }
+
+    /* Input Groups */
+    .input-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .input-group label {
+      display: none; /* Labels are hidden, placeholders are used */
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-bottom-color: #0afddb;
+    }
+
+    .input-group i.fa-solid, .input-group i.fas {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #0afddb;
+      font-size: 16px;
+    }
+
+    /* Button Styles */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      border: 2px solid #0afddb;
+      border-radius: 5px;
+      color: #0afddb;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 8px rgba(10, 253, 219, 0.5);
+    }
+
+    .btn:hover {
+      background: #0afddb;
+      color: #0a0a1f;
+      box-shadow: 0 0 20px #0afddb;
+    }
+
+    /* Footer and links */
+    .form-footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #a0a0c0;
+      font-size: 14px;
+    }
+
+    .form-footer a {
+      color: #0afddb;
+      text-decoration: none;
+      font-weight: 600;
+      transition: text-shadow 0.3s;
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+      text-shadow: 0 0 5px #0afddb;
+    }
+
+    /* Password visibility toggle */
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #a0a0c0;
+      transition: color 0.3s;
+    }
+    .password-toggle:hover {
+        color: #0afddb;
+    }
+
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<div class="container" id="formContainer">
+
+  <!-- Login Form -->
+  <div class="form-container login-form">
+    <div class="form-header">
+      <h2>Account Login</h2>
+      <p>Enter your credentials to access the platform</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="loginId" placeholder="Phone or Username" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <span class="password-toggle" id="loginPasswordToggle">
+            <i class="far fa-eye"></i>
+        </span>
+      </div>
+
+      <button type="submit" class="btn">Login</button>
+    </form>
+
+    <div class="form-footer">
+      <p>No account? <a href="#" id="showRegister">Register Now</a></p>
+    </div>
+  </div>
+
+  <!-- Registration Form -->
+  <div class="form-container register-form">
+    <div class="form-header">
+      <h2>Create Account</h2>
+      <p>Fill in the details below to register</p>
+    </div>
+
+    <form id="registerForm">
+      <div class="input-group">
+        <i class="fas fa-mobile-alt"></i>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="username" placeholder="Username (2-20 characters)" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+        <span class="password-toggle" id="registerPasswordToggle">
+            <i class="far fa-eye"></i>
+        </span>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      </div>
+
+      <button type="submit" class="btn">Register</button>
+    </form>
+
+    <div class="form-footer">
+      <p>Already have an account? <a href="#" id="showLogin">Login Now</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle between login/register forms
+  document.getElementById('showRegister').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('formContainer').classList.add('active');
+  });
+
+  document.getElementById('showLogin').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('formContainer').classList.remove('active');
+  });
+
+  // Toggle password visibility
+  function setupPasswordToggle(toggleId, inputId) {
+    const toggle = document.getElementById(toggleId);
+    const passwordInput = document.getElementById(inputId);
+    const eyeIcon = toggle.querySelector('i');
+
+    toggle.addEventListener('click', function() {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    });
+  }
+
+  setupPasswordToggle('loginPasswordToggle', 'loginPassword');
+  setupPasswordToggle('registerPasswordToggle', 'password');
+
+  // Handle Login Form Submission
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const loginId= document.getElementById('loginId').value;
+    const password = document.getElementById('loginPassword').value;
+
+    console.log('Login Info:', { loginId, password });
+
+    axios.post('/api/login',
+            `IdAccount=${encodeURIComponent(loginId)}&password=${encodeURIComponent(password)}`,
+            {
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            },{ withCredentials: true}
+    ).then(res=>{
+      if (res.data === "main") {
+        // On successful login, redirect to the main page
+        window.location.href = "upload";
+      } else {
+        alert("Login failed. Please check your username and password.");
+      }
+    }).catch(err => {
+        console.error(err);
+        alert("An error occurred during login.");
+    });
+  });
+
+  // Handle Registration Form Submission
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const phone = document.getElementById('phone').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Phone number format validation (example for Chinese numbers)
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      alert('Please enter a valid 11-digit phone number.');
+      return;
+    }
+
+     // Password strength validation
+     if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(password)) {
+       alert('Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number.');
+       return;
+     }
+
+     // Confirm password validation
+     if (password !== confirmPassword) {
+       alert('The two passwords do not match.');
+       return;
+     }
+
+    console.log('Registration Info:', { phone, username, password });
+
+    axios.post('/api/register', {
+      phone: phone,
+      username: username,
+      password: password
+    }).then(
+            res =>{
+             if(res.data == "registerFailed"){
+               alert("Registration failed. Phone number or username may already exist.");
+             }
+               else if(res.data == "registerSuccess"){
+               alert("Registration successful!");
+                // On success, switch back to the login form
+                document.getElementById('formContainer').classList.remove('active');
+                document.getElementById('loginId').value = username; // Pre-fill username
+              }
+            }
+    ).catch(err => {
+        console.error(err);
+        alert("An error occurred during registration.");
+    });
+  });
+</script>
+</body>
+</html>
