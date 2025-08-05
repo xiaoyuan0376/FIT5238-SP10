@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}An Error Occurred{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h2>Analysis Failed</h2>
+    <div class="error-container">
+        <p>An error occurred while processing your file. Please check the details below and try again.</p>
+        <div class="error-message">
+            <strong>Error Details:</strong>
+            <p>{{ error }}</p>
+        </div>
+        <a href="/" class="btn-submit" style="margin-top: 1rem; display: inline-block; text-decoration: none;">Return and Retry</a>
+    </div>
+</div>
+{% endblock %}

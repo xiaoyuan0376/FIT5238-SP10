@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DDoS Attack Analysis Platform{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1><a href="/">Intelligent DDoS Analysis Platform</a></h1>
+            <p>Traffic inspection powered by Deep Learning</p>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        
+        <footer class="main-footer">
+            <p>© 2025 AI-Powered Security Labs</p>
+        </footer>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

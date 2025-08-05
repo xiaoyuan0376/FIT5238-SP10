@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results - {{ filename }}{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h2>Analysis Report: <span class="filename">{{ filename }}</span></h2>
+    
+    <div class="summary-grid five-items">
+        <div class="summary-card"><h3>Total Flows</h3><p>{{ summary.total_rows }}</p></div>
+        <div class="summary-card benign"><h3>Benign Flows</h3><p>{{ summary.benign }}</p></div>
+        <div class="summary-card ddos"><h3>DDoS Flows</h3><p>{{ summary.ddos }}</p></div>
+        <div class="summary-card percentage"><h3>DDoS Ratio</h3><p>{{ summary.ddos_percentage }}%</p></div>
+        <!-- UPDATED: Title reverted for accuracy -->
+        <div class="summary-card alert"><h3>Critical Alerts</h3><p>{{ summary.alerts }}</p></div>
+    </div>
+
+    <div class="threat-intel-card">
+        <h3>Threat Intelligence</h3>
+        <h4>Top 5 Attacking Source IPs</h4>
+        <pre>{{ summary.top_attackers_string }}</pre>
+        <div class="explanation-section">
+            <button class="explanation-toggle">Hints</button>
+            <div class="explanation-content">
+                <p>This list shows the IP addresses that are the most frequent sources of detected DDoS traffic. These are likely the primary attackers and should be investigated or blocked at the firewall level.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Analysis Details table -->
+    <div class="table-title-header">
+        <h3>Full Analysis Details</h3>
+        <span>(Preview of first 1000 rows)</span>
+    </div>
+    <div class="results-table-container">
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Row</th>
+                    <th>Predicted Class</th>
+                    <th>Probability</th>
+                    <th class="tooltip-container">Risk Score<span class="tooltip-text">Classifies threat level.</span></th>
+                    <!-- UPDATED: Tooltip text reverted -->
+                    <th class="tooltip-container">Alert<span class="tooltip-text">'YES' is flagged for 'Critical' risk.</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in predictions %}
+                <tr class="prediction-{{ p.prediction.lower() }}">
+                    <td>{{ p.row_index }}</td>
+                    <td>{{ p.prediction }}</td>
+                    <td>{{ p.probability }}</td>
+                    <td class="risk-{{ p.risk_score.lower() }}">{{ p.risk_score }}</td>
+                    <td class="alert-{{ p.alert_triggered.lower() }}">{{ p.alert_triggered }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5">No prediction data to display.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Alert Details Table -->
+    <!-- UPDATED: Title reverted for accuracy -->
+    <div class="table-title-header alert-header">
+        <h3>Critical Alert Details</h3>
+        <span>(Showing all {{ summary.alerts }} alerted flows)</span>
+    </div>
+    <div class="results-table-container">
+        {% if alert_predictions %}
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Row</th>
+                    <th>Predicted Class</th>
+                    <th>Probability</th>
+                    <th>Risk Score</th>
+                    <th>Alert</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in alert_predictions %}
+                <tr class="prediction-{{ p.prediction.lower() }}">
+                    <td>{{ p.row_index }}</td>
+                    <td>{{ p.prediction }}</td>
+                    <td>{{ p.probability }}</td>
+                    <td class="risk-{{ p.risk_score.lower() }}">{{ p.risk_score }}</td>
+                    <td class="alert-{{ p.alert_triggered.lower() }}">{{ p.alert_triggered }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-alerts-message">
+            <p>No critical alerts detected in this dataset. Great news!</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Hints for tables -->
+    <div class="explanation-section table-hints">
+        <button class="explanation-toggle">Hints for Tables</button>
+        <div class="explanation-content">
+             <h4>Understanding the Columns:</h4>
+            <ul>
+                <li><strong>Risk Score:</strong> A simplified category based on the model's prediction probability.
+                    <!-- UPDATED: Reverted to original threshold descriptions -->
+                    <ul>
+                        <li><span class="risk-critical">Critical:</span> Prob > 0.95</li>
+                        <li><span class="risk-high">High:</span> Prob > 0.80</li>
+                        <li><span class="risk-medium">Medium:</span> Prob > 0.50</li>
+                        <li><span class="risk-low">Low:</span> Prob <= 0.50</li>
+                    </ul>
+                </li>
+                <!-- UPDATED: Reverted to original alert description -->
+                <li><strong>Alert:</strong> 'YES' is triggered for 'Critical' risk flows to highlight the most certain threats.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="{{ url_for('download_report', filename=report_filename) }}" class="btn-submit primary-action download-btn">Download Full Report (CSV)</a>
+        {% if alert_report_filename %}
+        <a href="{{ url_for('download_report', filename=alert_report_filename) }}" class="btn-submit primary-action alert-download-btn">Download Alert Report</a>
+        {% endif %}
+        <a href="/" class="btn-submit">Analyze New File</a>
+    </div>
+
+</div>
+{% endblock %}

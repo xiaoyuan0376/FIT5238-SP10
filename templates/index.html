@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Upload File - DDoS Attack Analysis Platform{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h2>Start Analysis</h2>
+    <p>Upload your network traffic data (CSV format). The system will analyze each flow using a pre-trained LSTM model to identify potential DDoS attacks.</p>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="post" enctype="multipart/form-data" id="upload-form">
+        <div class="form-group">
+            <label for="file-upload" class="custom-file-upload">
+                <span id="file-name">Select a file...</span>
+            </label>
+            <input id="file-upload" name="file" type="file" accept=".csv" required>
+        </div>
+        <button type="submit" class="btn-submit">Upload & Analyze</button>
+    </form>
+    
+    <div id="loader" class="loader-container" style="display: none;">
+        <div class="loader-ring"></div>
+        <p>Analyzing data, please wait...</p>
+    </div>
+</div>
+{% endblock %}

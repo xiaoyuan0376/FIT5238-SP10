@@ -6,7 +6,7 @@ import torch.optim as optim
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
 
-from model import DDoSDetector
+from models.model_definition import DDoSDetector
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
