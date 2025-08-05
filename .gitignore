@@ -1,72 +1,122 @@
-# ==== 操作系统生成文件 ====
-# Windows 系统文件
-Thumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-*.lnk
+# ===================================================================
+# Python related
+# ===================================================================
 
-# macOS 系统文件（跨平台协作时忽略）
-.DS_Store
-
-# ==== IDE 配置文件 ====
-# VS Code
-.vscode/
-!.vscode/settings.json  # 可保留必要配置
-*.code-workspace
-
-# PyCharm
-.idea/
-*.iml
-*.ipr
-*.iws
-*.swp
-
-# ==== Python 编译与缓存文件 ====
+# Byte-compiled / optimized / C extensions
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
+*$py.class
+
+# C extensions
 *.so
-dist/
+
+# Distribution / packaging
+.Python
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 *.egg-info/
+.installed.cfg
 *.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
 
-# ==== 虚拟环境 ====
-# Python 虚拟环境目录
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Environments
+.env
+.venv
+env/
 venv/
 ENV/
-env/
-.venv/
+env.bak/
+venv.bak/
 
-# ==== 日志与临时文件 ====
-*.log
-*.tmp
-*.temp
-*.bak
-*.pid
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
-# ==== 数据与缓存文件 ====
-*.db
-*.sqlite
-*.sqlite3
-*.cache
+# Pyre type checker
+.pyre/
 
-# ==== 其他开发工具 ====
-# Jupyter Notebook
-.ipynb_checkpoints/
+# pytype
+.pytype/
 
-# Node.js
-node_modules/
-npm-debug.log
-yarn-error.log
 
-# Docker
-docker-compose.override.yml
+# ===================================================================
+# Project specific files
+# ===================================================================
 
-# ==== 项目特定目录 ====
-# 上传文件和结果文件目录
+# Directories for user-uploaded files and generated reports.
+# These should not be version controlled.
 uploads/
-results/
+reports/
+
+# If you have local configuration files that should not be committed.
+# config.ini
+# .secrets
+
+
+# ===================================================================
+# IDE / OS / Editor specific
+# ===================================================================
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+.Trashes
+.Spotlight-V100
+.fseventsd
+
+# Windows
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
