@@ -18,7 +18,9 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Roboto Mono', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 2rem; background-image: radial-gradient(circle, rgba(0, 229, 255, 0.05) 1px, transparent 1px); background-size: 20px 20px; }
-.container { width: 100%; max-width: 900px; }
+
+/* --- MODIFICATION HERE: Increased the max-width of the main container --- */
+.container { width: 100%; max-width: 1140px; } /* Changed from 900px to 1140px */
 
 /* --- Header & Footer --- */
 .main-header { text-align: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; animation: fadeInDown 1s ease; }
@@ -29,7 +31,7 @@ body { background-color: var(--bg-color); color: var(--text-color); font-family:
 /* --- Main Content Card --- */
 .content-card { background-color: var(--primary-card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; box-shadow: 0 0 20px var(--shadow-color); animation: fadeInUp 1s ease; }
 .content-card h2 { font-family: 'Orbitron', sans-serif; color: var(--accent-color); margin-bottom: 1rem; }
-.filename { color: var(--text-color); font-style: italic; }
+.filename { color: var(--text-color); font-style: italic; word-break: break-all; }
 
 /* --- Form Elements --- */
 .form-group { margin: 2rem 0; }
@@ -47,15 +49,15 @@ input[type="file"] { display: none; }
 .alert-download-btn { background-color: var(--danger-color); border-color: var(--danger-color); color: #ffffff; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
 .alert-download-btn:hover { background: transparent; color: var(--danger-color); box-shadow: 0 0 15px var(--danger-color); }
 
-
-/* --- Summary & Threat Intelligence Cards (FIXED ALIGNMENT) --- */
+/* --- Summary & Threat Intelligence Cards --- */
 .summary-grid {
     display: grid;
     gap: 1.5rem;
     margin: 2rem 0;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
-@media (min-width: 900px) {
+/* MODIFICATION 2: Adjusted breakpoint to match wider container */
+@media (min-width: 992px) { /* Changed from 900px */
     .summary-grid.five-items {
         grid-template-columns: repeat(5, 1fr);
     }
@@ -82,7 +84,7 @@ input[type="file"] { display: none; }
 
 .summary-card p {
     font-family: 'Orbitron', sans-serif;
-    font-size: 2rem;
+    font-size: 2rem; /* Reverted to the fixed font size */
     font-weight: bold;
     margin: 0;
 }
