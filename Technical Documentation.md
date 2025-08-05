@@ -111,6 +111,7 @@ This module is the "process controller" of the system. It orchestrates the entir
         1.  `predictions_list` (list): A list of predicted class strings (`'DDoS'` or `'BENIGN'`).
         2.  `probabilities_list` (list): A list of formatted prediction probability strings.
     *   **Usage Example (from `analysis_handler.py`):**
+        
         ```python
         from models.prediction import run_prediction
         
@@ -118,22 +119,77 @@ This module is the "process controller" of the system. It orchestrates the entir
         df['Prediction_Class'] = pred_classes
         ```
 
+#### 3.3. Main Application and Authentication: app.py
+
+app.py is the core of the Flask application, handling not only web request routing but also integrated user authentication and session management.
+
+- **Core Responsibilities:**
+  - **User Authentication:** Handles user registration, login, and logout logic through integration with **Google Firebase Firestore**.
+  - **Session Management:** Leverages Flask's session object to track user status after login and protect endpoints requiring authentication.
+  - **Request Routing:** Defines all web endpoints (see Section 4) and dispatches requests to the appropriate processing logic (e.g., file uploads to analysis_handler).
+  - **Serving Static Files and Templates:** Renders HTML pages and serves static assets such as CSS and JS.
+- **Firebase Integration:**
+  - Initializes the Firebase Admin SDK using serviceAccountKey.json when the application starts.
+  - All user data (username, phone number, password) is stored in a Firestore collection named users.
+  - When registering, we will check if the phone number or username already exists to ensure uniqueness.
+
 ---
 
-### 4. Web Routes (API Endpoints)
+* ### 4. Web Routing (API Endpoints)
 
-The application exposes the following endpoints:
+  The application provides the following API endpoints, divided into two parts: user authentication and core analytics.
 
-#### 4.1. `GET, POST /`
-*   **Endpoint:** The root URL of the application.
-*   **Methods:** `GET`, `POST`
-*   **Description:**
-    *   **GET:** Renders the main upload page (`index.html`).
-    *   **POST:** Handles the analysis request. It expects a file upload (`multipart/form-data`) and orchestrates the analysis pipeline.
-*   **Response:** Renders `results.html` on success or `error.html` on failure.
+  #### 4.1. Authentication Endpoints
 
-#### 4.2. `GET /download/<filename>`
-*   **Endpoint:** `/download/<filename>`
-*   **Method:** `GET`
-*   **Description:** Allows the user to download a previously generated report file. It handles both full and alert-only report downloads.
-*   **Response:** The requested file from the `/reports` directory, served as an attachment to trigger a browser download.
+  These endpoints together form the complete user authentication process.
+
+  **GET /**
+
+  - **Purpose:** Display the main login/registration page (login_register.html). This is the entry point for all users.
+  - **Response:** The rendered HTML page.
+
+  **POST     /api/register**
+
+  - **Purpose:** Handle new user registration requests.
+  - **Request Body:** application/json, containing phone number, username, and password.
+  - **Response:**
+    - registerSuccess (status code 200): User creation successful.
+    - registerFailed (status code 200): Phone number or username already exists.
+    - Data not full (status code 400): Request data is incomplete.
+
+
+  **POST     /api/login**
+
+  - **Purpose:** Handle user login requests.
+  - **Request Body:** application/x-www-form-urlencoded, containing the IDAccount (can be a username or phone number) and password.
+  - **Response:**
+    - main (status code 200): Login successful. The server will set up a user session, and the client should redirect to /upload.
+    - login failure... (status code 200): Incorrect credentials.
+    - data not full (status code 400): The request data is incomplete.
+
+
+  **GET     /api/logout**
+
+  - **Purpose:** Clears the current user's session and logs out.
+  - **Response:** Redirects to the root URL / (login page).
+
+  #### 4.2. Core Functionality Endpoints
+
+  These endpoints are the main analysis functions of the system.
+
+  **GET, POST /upload**
+
+  - **Purpose:**
+    - **GET:** Displays the file upload page (index.html), which is the main interface for DDoS analysis.
+    - **POST:** Processes the uploaded CSV file for analysis. This is the core endpoint that triggers the entire analysis process.
+
+  - **Request Body (POST):** multipart/form-data, must contain a file part named file.
+  - **Response:**
+    - **Success:** Renders the results.html page containing the analysis results, summary, and download link.
+    - **Failure:** If the file is invalid, there was an error processing, or no file was selected, redirects back to the upload page and displays the error via a flash message, or renders the error.html page with the specific exception.
+
+
+  **GET /download/<filename>**
+  - **Purpose:** Allows the user to download a previously generated report file.
+  - **URL Parameters:** filename (str) - The report file name provided in the results.html page.
+  - **Response:** Finds the corresponding file from the /reports directory and serves it to the browser as an attachment for download.
