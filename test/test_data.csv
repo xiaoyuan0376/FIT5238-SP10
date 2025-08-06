@@ -1,0 +1,4 @@
+ Fwd Packet Length Mean, Fwd Packet Length Max, Avg Fwd Segment Size,Init_Win_bytes_forward, Subflow Fwd Bytes,Total Length of Fwd Packets, act_data_pkt_fwd, Bwd Packet Length Min,Subflow Fwd Packets, Fwd IAT Std
+10.5,100.0,50.2,1024.0,512.0,1000.0,5.0,20.0,3.0,1.5
+20.1,200.0,75.3,2048.0,1024.0,2000.0,10.0,30.0,6.0,2.0
+15.7,150.0,60.1,1536.0,768.0,1500.0,7.0,25.0,4.0,1.8
