@@ -37,4 +37,9 @@ then enter on the website: http://127.0.0.1:5000/.
 > [!WARNING]
 >
 > If there is no response when you click the login/registration button, please ensure that your network environment can access Google
-
+> 
+> You can use test.py to detect it :
+> 
+> ``` python test.py ```
+> 
+> If appear "data write success" message, it means your network is ok.
