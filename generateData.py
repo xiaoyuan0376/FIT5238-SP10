@@ -65,7 +65,9 @@ def process_uploaded_file(upload_filepath: str,n: int,output_filepath:str) -> tu
     df_line['Risk_Score'] = df_line['Prediction_Probability'].apply(_map_risk_score)
     # --- REVERTED: Alert now triggers for 'Critical' ONLY ---
     df_line['Alert_Triggered'] = df_line['Risk_Score'].apply(lambda x: "YES" if x == "Critical" else "NO")
-
+    output_dir = os.path.dirname(output_filepath)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
     header_needed = not os.path.exists(output_filepath)
 
     df_line.to_csv(
@@ -81,6 +83,6 @@ while(1):
     csv_File_Path = "random_test_sets/random_test_sets/random_test_set_1.csv"
     random_number = random.randint(1, 800)
     print('generate data:')
-    print(process_uploaded_file(csv_File_Path,random_number,"222/generate.csv"))
+    print(process_uploaded_file(csv_File_Path,random_number,"real/generate.csv"))
 
     time.sleep(1)
