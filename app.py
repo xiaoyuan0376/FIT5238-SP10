@@ -176,7 +176,7 @@ def download_report(filename):
 #page 3
 from flask import render_template
 
-RESULTS_CSV_PATH = '222/generate.csv'
+RESULTS_CSV_PATH = 'real/generate.csv'
 MAX_CHART_POINTS = 30
 
 @app.route('/real')
