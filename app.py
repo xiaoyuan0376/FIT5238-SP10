@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
+import pandas as pd
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, send_file
 import firebase_admin
 from firebase_admin import credentials, firestore
 import os
@@ -81,6 +82,7 @@ def login():
 
     return "login failure, please check your password or username"
 
+#after will use
 @app.route('/api/logout')
 def logout():
     """ logout """
@@ -95,7 +97,7 @@ REPORTS_FOLDER = 'reports'
 ALLOWED_EXTENSIONS = {'csv'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['REPORTS_FOLDER'] = REPORTS_FOLDER
-app.config['SECRET_KEY'] = 'a_very_secret_key_for_production'
+#app.config['SECRET_KEY'] = 'a_very_secret_key_for_production'
 
 # Ensure directories exist upon startup
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -171,7 +173,31 @@ def download_report(filename):
         as_attachment=True
     )
 
+#page 3
+from flask import render_template
+
+RESULTS_CSV_PATH = '222/generate.csv'
+MAX_CHART_POINTS = 30
+
+@app.route('/real')
+def real_index():
+    return render_template('RealCheck.html')
+
+@app.route('/real/data')
+def get_data():
+    try:
+        df = pd.read_csv(RESULTS_CSV_PATH)
+        print(df)
+        latest_data = df.tail(MAX_CHART_POINTS)
+        labels = latest_data[' Source IP'].tolist()
+        data = latest_data['Prediction_Probability'].tolist()
+        return jsonify({'labels': labels, 'data': data})
+    except:
+        return jsonify({'labels': [], 'data': []})
+@app.route('/real/download')
+def download_file():
+    return send_file(RESULTS_CSV_PATH, as_attachment=True)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)

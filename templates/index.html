@@ -6,7 +6,7 @@
 <div class="content-card">
     <h2>Start Analysis</h2>
     <p>Upload your network traffic data (CSV format). The system will analyze each flow using a pre-trained LSTM model to identify potential DDoS attacks.</p>
-    
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -23,11 +23,21 @@
             <input id="file-upload" name="file" type="file" accept=".csv" required>
         </div>
         <button type="submit" class="btn-submit">Upload & Analyze</button>
+
+        <div style="margin-top: 30px; text-align: center;" class="btn-href">
+            <a href="/real" style="text-decoration:none" target="_blank">Real detection</a>
+        </div>
     </form>
-    
+
     <div id="loader" class="loader-container" style="display: none;">
         <div class="loader-ring"></div>
         <p>Analyzing data, please wait...</p>
     </div>
 </div>
 {% endblock %}
+
+<style>
+.btn-href { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 0.8rem 1.5rem; font-family: 'Orbitron', sans-serif; font-size: 1rem; cursor: pointer; border-radius: 5px; transition: all 0.3s ease; width: 100%; text-decoration: none; }
+.btn-href:hover { background: var(--accent-color); color: var(--bg-color); box-shadow: 0 0 15px var(--shadow-color); }
+.action-buttons .btn-href { width: auto; }
+</style>
