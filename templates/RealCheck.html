@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Platform</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #00ffff;
+            padding: 20px;
+
+
+            background-color: #0a0f2a;
+            background-image:
+                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 35px 35px;
+        }
+
+        .main-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+        }
+
+        .subtitle {
+            font-size: 1em;
+            text-align: center;
+            color: #cccccc;
+            margin-bottom: 40px;
+        }
+
+        .chart-container {
+            width: 80%;
+            max-width: 900px;
+            padding: 30px;
+            background-color: rgba(10, 25, 49, 0.8); /* Slightly more solid background for readability */
+            border-radius: 8px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.3);
+            margin-bottom: 30px;
+            backdrop-filter: blur(3px); /* Frosted glass effect for the container */
+        }
+
+        .download-button {
+            padding: 12px 25px;
+            background-color: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .download-button:hover {
+            background-color: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <h1 class="main-title">Real-Time Analysis Platform</h1>
+    <p class="subtitle">Traffic Inspection Powered by Live Data</p>
+
+    <div class="chart-container">
+        <canvas id="stockChart"></canvas>
+    </div>
+
+    <a href="/real/download" download>
+        <button class="download-button">DOWNLOAD CSV</button>
+    </a>
+
+    <script>
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        const chartTextColor = '#00ffff';
+        const chartGridColor = 'rgba(0, 255, 255, 0.2)';
+
+        const stockChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Prediction_Probability',
+                    data: [], // Y-axis data (probability)
+                    borderColor: '#00ffff',
+                    backgroundColor: 'rgba(0, 255, 255, 0.15)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#00ffff',
+                    pointBorderColor: '#fff',
+                    pointHoverRadius: 7,
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#00ffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: chartTextColor,
+                            font: {
+                                size: 14,
+                                family: "'Courier New', Courier, monospace"
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            color: chartGridColor
+                        },
+                        ticks: {
+                            color: chartTextColor,
+                            callback: function(value, index, values) {
+                                return (value * 100).toFixed(2) + "%";
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: chartGridColor
+                        },
+                        ticks: {
+                            color: chartTextColor
+                        }
+                    }
+                },
+                animation: {
+                    duration: 200
+                }
+            }
+        });
+
+        async function updateChart() {
+            try {
+                const response = await fetch('/real/data');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const chartData = await response.json();
+
+                stockChart.data.labels = chartData.labels;
+                stockChart.data.datasets[0].data = chartData.data;
+
+                stockChart.update('none');
+            } catch (error) {
+                console.error('Could not fetch chart data:', error);
+            }
+        }
+
+        updateChart();
+        setInterval(updateChart, 2000);
+    </script>
+
+</body>
+</html>

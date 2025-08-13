@@ -1,25 +1,25 @@
 # Technical Documentation: DDoS Traffic Analysis System
 
-### 1. Overview
+## 1. Overview
 
-#### 1.1. Project Purpose
+### 1.1. Project Purpose
 The DDoS Traffic Analysis System is a web-based application designed to provide a user-friendly interface for analyzing network traffic data from CSV files. Users can upload a file, and the system leverages a pre-trained deep learning model to predict whether each traffic flow is `BENIGN` or part of a `DDoS` attack. The system generates comprehensive analysis results, including detailed reports, risk assessments, and a focused summary of high-risk "alert" traffic.
 
-#### 1.2. Core Technologies
+### 1.2. Core Technologies
 *   **Backend Framework:** Python with Flask
 *   **AI/ML Framework:** PyTorch
 *   **Data Manipulation:** Pandas & NumPy
 *   **Frontend:** HTML5, CSS3, JavaScript (Jinja2 for templating)
 *   **Core AI Model:** A stacked Long Short-Term Memory (LSTM) network
 
-#### 1.3. Target Audience
+### 1.3. Target Audience
 This document is intended for software developers, system architects, and data scientists involved in the maintenance, deployment, or future development of this system.
 
 ---
 
-### 2. System Design & Architecture
+## 2. System Design & Architecture
 
-#### 2.1. Architectural Style
+### 2.1. Architectural Style
 The system is designed as a **Monolithic Web Application** following a **Layered Architecture**, emphasizing a clear **Separation of Concerns**.
 
 *   **Presentation Layer:** Comprised of `app.py` and the `templates/` & `static/` directories. It is responsible for handling user interaction and rendering pages.
@@ -28,7 +28,7 @@ The system is designed as a **Monolithic Web Application** following a **Layered
 
 This layered approach ensures that each part of the application can be modified and tested independently. For example, the UI can be updated without affecting the backend logic.
 
-#### 2.2. Project Structure
+### 2.2. Project Structure
 ```
 DDoS_Traffic_Analysis_System/
 |
@@ -49,7 +49,7 @@ DDoS_Traffic_Analysis_System/
 |-- reports/                    # (Auto-created) Generated reports
 ```
 
-#### 2.3. Data Flow
+### 2.3. Data Flow
 The typical user workflow triggers the following data flow:
 1.  **Upload:** User selects a CSV file and submits the form on the `index.html` page.
 2.  **Request Handling:** `app.py` receives the `POST` request, saves the file to the `/uploads` directory, and calls `process_uploaded_file()` in `analysis_handler.py`.
@@ -63,11 +63,11 @@ The typical user workflow triggers the following data flow:
 
 ---
 
-### 3. Core Module API Documentation
+## 3. Core Module API 
 
 This section details the functions and APIs of the key Python files.
 
-#### 3.1. Business Logic Layer: `analysis_handler.py`
+### 3.1. Business Logic Layer: `analysis_handler.py`
 This module is the "process controller" of the system. It orchestrates the entire analysis workflow.
 
 ##### Function: `process_uploaded_file(upload_filepath, report_dir, original_filename)`
@@ -95,13 +95,13 @@ This module is the "process controller" of the system. It orchestrates the entir
         return render_template('error.html', error=str(e))
     ```
 
-#### 3.2. AI Model Layer: `models/`
+### 3.2. AI Model Layer: `models/`
 
-##### File: `models/model_definition.py`
+#####  `models/model_definition.py`
 *   **Purpose:** This file **only defines** the neural network architecture of the PyTorch model.
 *   **Class: `DDoSDetector(nn.Module)`**: Defines a stacked LSTM network. Its `forward()` method specifies the data path through the network layers.
 
-##### File: `models/prediction.py`
+#####  `models/prediction.py`
 *   **Purpose:** Provides a **clean, efficient, and isolated inference interface**. It loads the model only once at application startup for high performance.
 *   **Function: `run_prediction(df_predict)`**
     *   **Purpose:** Receives a prepared DataFrame, performs prediction using the globally loaded model, and returns the results. This is the **only public function** exposed by this module.
@@ -119,7 +119,7 @@ This module is the "process controller" of the system. It orchestrates the entir
         df['Prediction_Class'] = pred_classes
         ```
 
-#### 3.3. Main Application and Authentication: app.py
+### 3.3. Main Application and Authentication: app.py
 
 app.py is the core of the Flask application, handling not only web request routing but also integrated user authentication and session management.
 
@@ -135,30 +135,29 @@ app.py is the core of the Flask application, handling not only web request routi
 
 ---
 
-* ### 4. Web Routing (API Endpoints)
+## 4. Web Routing (API Endpoints)
 
-  The application provides the following API endpoints, divided into two parts: user authentication and core analytics.
+The application provides the following API endpoints, divided into two parts: user authentication and core analytics.
 
-  #### 4.1. Authentication Endpoints
+### 4.1. Authentication Endpoints
 
-  These endpoints together form the complete user authentication process.
+These endpoints together form the complete user authentication process.
 
-  **GET /**
+#### GET /
 
-  - **Purpose:** Display the main login/registration page (login_register.html). This is the entry point for all users.
-  - **Response:** The rendered HTML page.
+- **Purpose:** Display the main login/registration page (login_register.html). This is the entry point for all users.
+- **Response:** The rendered HTML page.
 
-  **POST     /api/register**
+#### POST /api/register
 
-  - **Purpose:** Handle new user registration requests.
-  - **Request Body:** application/json, containing phone number, username, and password.
-  - **Response:**
-    - registerSuccess (status code 200): User creation successful.
-    - registerFailed (status code 200): Phone number or username already exists.
-    - Data not full (status code 400): Request data is incomplete.
+- **Purpose:** Handle new user registration requests.
+- **Request Body:** application/json, containing phone number, username, and password.
+- **Response:**
+  - registerSuccess (status code 200): User creation successful.
+  - registerFailed (status code 200): Phone number or username already exists.
+  - Data not full (status code 400): Request data is incomplete.
 
-
-  **POST     /api/login**
+####   POST /api/login
 
   - **Purpose:** Handle user login requests.
   - **Request Body:** application/x-www-form-urlencoded, containing the IDAccount (can be a username or phone number) and password.
@@ -167,17 +166,16 @@ app.py is the core of the Flask application, handling not only web request routi
     - login failure... (status code 200): Incorrect credentials.
     - data not full (status code 400): The request data is incomplete.
 
-
-  **GET     /api/logout**
+####   GET  /api/logout
 
   - **Purpose:** Clears the current user's session and logs out.
   - **Response:** Redirects to the root URL / (login page).
 
-  #### 4.2. Core Functionality Endpoints
+  ### 4.2. Core Functionality Endpoints
 
   These endpoints are the main analysis functions of the system.
 
-  **GET, POST /upload**
+####   GET, POST /upload
 
   - **Purpose:**
     - **GET:** Displays the file upload page (index.html), which is the main interface for DDoS analysis.
@@ -188,8 +186,8 @@ app.py is the core of the Flask application, handling not only web request routi
     - **Success:** Renders the results.html page containing the analysis results, summary, and download link.
     - **Failure:** If the file is invalid, there was an error processing, or no file was selected, redirects back to the upload page and displays the error via a flash message, or renders the error.html page with the specific exception.
 
+####   GET /download/<filename>
 
-  **GET /download/<filename>**
   - **Purpose:** Allows the user to download a previously generated report file.
   - **URL Parameters:** filename (str) - The report file name provided in the results.html page.
   - **Response:** Finds the corresponding file from the /reports directory and serves it to the browser as an attachment for download.
