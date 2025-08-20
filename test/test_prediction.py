@@ -4,10 +4,7 @@ import unittest
 import pandas as pd
 import torch
 
-# Add the models directory to the path
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
-
-# 修复导入问题
+# Add the project root directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from models.prediction import run_prediction, MODEL

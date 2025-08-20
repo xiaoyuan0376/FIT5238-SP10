@@ -6,12 +6,13 @@
 The DDoS Traffic Analysis System is a web-based application designed to provide a user-friendly interface for analyzing network traffic data from CSV files. Users can upload a file, and the system leverages a pre-trained deep learning model to predict whether each traffic flow is `BENIGN` or part of a `DDoS` attack. The system generates comprehensive analysis results, including detailed reports, risk assessments, and a focused summary of high-risk "alert" traffic.
 
 ### 1.2. Core Technologies
-*   **Backend Framework:** Python with Flask
+*   **Backend Framework:** Python 3.8+ with Flask 2.0+
 *   **AI/ML Framework:** PyTorch
-*   **Data Manipulation:** Pandas & NumPy
-*   **Frontend:** HTML5, CSS3, JavaScript (Jinja2 for templating)
-*   **Authentication:** Firebase Firestore
-*   **Core AI Model:** A stacked Long Short-Term Memory (LSTM) network
+*   **Data Manipulation:** Pandas, NumPy, Scikit-learn
+*   **Frontend:** HTML5, CSS3, JavaScript (Jinja2 templating, Axios for API calls)
+*   **Authentication:** Firebase Firestore with Admin SDK
+*   **Testing Framework:** Python unittest with comprehensive test coverage
+*   **Core AI Model:** 4-layer stacked LSTM network with dropout regularization
 
 ### 1.3. Target Audience
 This document is intended for software developers, system architects, and data scientists involved in the maintenance, deployment, or future development of this system.
@@ -36,21 +37,43 @@ DDoS_Traffic_Analysis_System/
 |
 |-- app.py                      # Core Flask application (Presentation Layer)
 |-- analysis_handler.py         # Business Logic Layer
+|-- generateData.py             # Real-time data generation script
+|-- test_network.py             # Network testing utilities
 |-- requirements.txt
+|-- serviceAccountKey.json      # Firebase authentication credentials
+|-- run_sheet.md               # Operational procedures documentation
 |
 |-- models/                     # Data Access / Model Layer
 |   |-- __init__.py
 |   |-- model_definition.py       # Model architecture definition
 |   |-- prediction.py             # Model inference interface
 |   |-- train.py                  # Model training script
-|   |-- ddos_detection_model.pth  # Model weights
+|   |-- ddos_detection_model.pth  # Primary model weights
+|   |-- ddos_detection_model_2.pth # Secondary model weights
 |
 |-- static/                     # Static assets (Presentation Layer)
+|   |-- css/style.css
+|   |-- js/main.js
+|
 |-- templates/                  # HTML templates (Presentation Layer)
+|   |-- base.html, index.html, login_register.html
+|   |-- results.html, error.html, RealCheck.html
+|   |-- axios.min.js
+|
+|-- test/                       # Comprehensive testing framework
+|   |-- test_*.py               # Unit, functional, performance, data quality tests
+|   |-- run_all_tests.py        # Test runner
+|   |-- test_set.csv            # Test dataset
+|   |-- Test_Documentation.md   # Test documentation (English)
+|   |-- Test_Documentation_CN.md # Test documentation (Chinese)
 |
 |-- uploads/                    # (Auto-created) User-uploaded files
-|-- reports/                    # (Auto-created) Generated reports
+|-- reports/                    # (Auto-created) Generated analysis reports
 |-- real/                       # Real-time data directory
+|   |-- generate.csv
+|
+|-- random_test_sets/           # Test datasets
+|-- analysis/                   # Analysis utilities and documentation
 ```
 
 ### 2.3. Data Flow
@@ -258,14 +281,3 @@ The system classifies traffic flows into risk categories based on prediction pro
 - **Low:** Probability <= 0.5
 
 Only traffic classified as "Critical" triggers an alert (marked as "YES").
-
----
-
-## 6. Model Architecture
-
-The DDoS detection model is a stacked LSTM network with the following architecture:
-1. First layer: Bidirectional LSTM with input dimension=input_dim, hidden layer dimension=10
-2. Second layer: LSTM with input dimension=20, hidden layer dimension=10
-3. Third layer: LSTM with input dimension=10, hidden layer dimension=10
-4. Fourth layer: LSTM with input dimension=10, hidden layer dimension=10
-5. Fully connected layer with sigmoid activation function to output a probability value between 0-1
