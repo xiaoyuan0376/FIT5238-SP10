@@ -11,6 +11,8 @@
 | UT-001 | LSTM model initialization test | input_dim=10 | Successfully create DDoSDetector instance with 4 LSTM layers + Full-Connected layer | Verify model components (lstm1-4, fc) initialization | ✅ Passed |
 | UT-002 | Model forward propagation test | Random tensor (1,1,10) | Single sigmoid output [0,1], no NaN/inf values | Verify forward pass output shape and range | ✅ Passed |
 
+UT-001 and UT-002
+
 ![UT-001 and UT-002](https://tuchuang-1318407677.cos.ap-nanjing.myqcloud.com/img/image-20250820111410084.png?imageSlim)
 
 #### 1.2 Prediction Module Tests (models/prediction.py)
@@ -20,6 +22,8 @@
 | UT-003 | Model loading test | Pre-trained model file | MODEL global variable loaded as torch.nn.Module | Verify model loading and type validation | ✅ Passed |
 | UT-004 | Prediction function test | DataFrame with 10 required features | Lists of predictions ["DDoS"/"BENIGN"] and probabilities [0-1] | Verify run_prediction function return format and content | ✅ Passed |
 
+UT-003 and UT-004  
+
 ![image-20250820111817643](C:\Users\Sean\AppData\Roaming\Typora\typora-user-images\image-20250820111817643.png)
 
 #### 1.3 Data Processing Module Tests (analysis_handler.py)
@@ -28,6 +32,8 @@
 |--------------|------------------|-------|-----------------|-------------|-------------|
 | UT-005 | Risk scoring mapping test | Probabilities: 0.96, 0.85, 0.6, 0.3, edge cases | Risk levels: Critical(>0.95), High(>0.8), Medium(>0.5), Low(≤0.5) | Verify _map_risk_score function with boundary values and invalid inputs | ✅ Passed |
 | UT-006 | File processing function test | CSV file with 3 rows of 10 features | 5-tuple: (predictions, alerts, summary, report_filename, alert_filename) | Verify process_uploaded_file complete workflow | ✅ Passed |
+
+UT-005 and UT-005
 
 ![image-20250820111940898](C:\Users\Sean\AppData\Roaming\Typora\typora-user-images\image-20250820111940898.png)
 
